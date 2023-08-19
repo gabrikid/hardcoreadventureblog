@@ -1,25 +1,28 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.Instant;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Author {
+@AllArgsConstructor
+public class PostEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String name;
+    private String title;
 
-    private String email;
+    private String content;
+
+    private Instant postedOn;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AuthorEntity authorEntity;
 
 }
