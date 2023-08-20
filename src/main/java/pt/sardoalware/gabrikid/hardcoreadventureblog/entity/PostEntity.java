@@ -22,7 +22,7 @@ public class PostEntity {
 
     private Instant postedOn;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private AuthorEntity authorEntity;
 
 }

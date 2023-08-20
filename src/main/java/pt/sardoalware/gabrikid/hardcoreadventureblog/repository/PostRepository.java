@@ -5,6 +5,4 @@ import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.PostEntity;
 
 public interface PostRepository extends PagingAndSortingRepository<PostEntity, Integer> {
 
-
-
 }

@@ -33,11 +33,14 @@ public class AuthorDto {
     }
 
     public static AuthorEntity parse(AuthorDto authorDto) {
-        return new AuthorEntity(
-                null,
-                authorDto.getName(),
-                authorDto.getEmail()
-        );
+        AuthorEntity authorEntity = new AuthorEntity();
+        merge(authorDto, authorEntity);
+        return authorEntity;
+    }
+
+    public static void merge(AuthorDto from, AuthorEntity to) {
+        to.setName(from.getName());
+        to.setEmail(from.getEmail());
     }
 
 }
