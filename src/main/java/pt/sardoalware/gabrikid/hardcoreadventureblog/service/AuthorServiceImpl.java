@@ -3,7 +3,8 @@ package pt.sardoalware.gabrikid.hardcoreadventureblog.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorDto;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorRequestDto;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.AuthorEntity;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.AuthorNotFoundException;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.EmailAlreadyExistsException;
@@ -21,55 +22,51 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
     @Override
-    public List<AuthorDto> findAll() {
+    public List<AuthorResponseDto> findAll() {
         Iterable<AuthorEntity> authorEntityIterable = authorRepository.findAll();
 
         return StreamSupport
                 .stream(authorEntityIterable.spliterator(), false)
-                .map(AuthorDto::of)
+                .map(AuthorResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AuthorDto create(AuthorDto authorDto)
+    public AuthorResponseDto create(AuthorRequestDto authorRequestDto)
             throws EmailAlreadyExistsException {
-        validateEmailNotExists(authorDto.getEmail());
+        validateEmailNotExists(authorRequestDto.email());
 
         AuthorEntity authorEntity = authorRepository.save(
-                AuthorDto.parse(authorDto)
+                authorRequestDto.parse()
         );
 
-        authorDto.setId(authorEntity.getId());
-
-        return authorDto;
+        return new AuthorResponseDto(authorEntity);
     }
 
     @Override
-    public AuthorDto update(Integer id, AuthorDto authorDto)
+    public AuthorResponseDto update(Integer id, AuthorRequestDto authorRequestDto)
             throws AuthorNotFoundException, EmailAlreadyExistsException {
         AuthorEntity authorEntity = validateAuthorExists(id);
 
-        if (!authorDto.getEmail().equals(authorEntity.getEmail())) {
-            validateEmailNotExists(authorDto.getEmail());
+        if (!authorRequestDto.email().equals(authorEntity.getEmail())) {
+            validateEmailNotExists(authorRequestDto.email());
         }
 
-        AuthorDto.merge(authorDto, authorEntity);
+        authorRequestDto.merge(authorEntity);
 
         authorEntity = authorRepository.save(authorEntity);
 
-        authorDto.setId(authorEntity.getId());
-
-        return authorDto;
+        return new AuthorResponseDto(authorEntity);
     }
 
     @Override
-    public AuthorDto delete(Integer id)
+    public AuthorResponseDto delete(Integer id)
             throws AuthorNotFoundException {
         AuthorEntity authorEntity = validateAuthorExists(id);
 
         authorRepository.delete(authorEntity);
 
-        return AuthorDto.of(authorEntity);
+        return new AuthorResponseDto(authorEntity);
     }
 
     private AuthorEntity validateAuthorExists(Integer id) throws AuthorNotFoundException {
