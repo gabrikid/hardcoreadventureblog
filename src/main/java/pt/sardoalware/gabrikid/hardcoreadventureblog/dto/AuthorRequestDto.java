@@ -15,6 +15,7 @@ public record AuthorRequestDto(
         @Email
         String email
 ) {
+
     public AuthorEntity parse() {
         AuthorEntity authorEntity = new AuthorEntity();
         merge(authorEntity);
@@ -25,4 +26,5 @@ public record AuthorRequestDto(
         to.setName(name());
         to.setEmail(email());
     }
+
 }

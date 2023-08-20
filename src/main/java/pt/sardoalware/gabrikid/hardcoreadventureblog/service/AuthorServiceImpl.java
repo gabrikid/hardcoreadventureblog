@@ -78,7 +78,7 @@ public class AuthorServiceImpl implements AuthorService {
             return authorEntityOptional.get();
         }
         else {
-            throw new AuthorNotFoundException("Author not found");
+            throw new AuthorNotFoundException();
         }
     }
 
@@ -86,7 +86,7 @@ public class AuthorServiceImpl implements AuthorService {
         Optional<AuthorEntity> authorEntityOptional = authorRepository.findByEmailIgnoreCase(email);
 
         if (authorEntityOptional.isPresent()) {
-            throw new EmailAlreadyExistsException("The email already exists");
+            throw new EmailAlreadyExistsException();
         }
     }
 

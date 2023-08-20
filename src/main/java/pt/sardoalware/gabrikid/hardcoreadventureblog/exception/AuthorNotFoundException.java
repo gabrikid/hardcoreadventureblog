@@ -1,9 +1,9 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.exception;
 
-public class AuthorNotFoundException extends HABException {
+public class AuthorNotFoundException extends Throwable {
 
-    public AuthorNotFoundException(String message) {
-        super(message);
+    public AuthorNotFoundException() {
+        super("The author was not found.");
     }
 
 }

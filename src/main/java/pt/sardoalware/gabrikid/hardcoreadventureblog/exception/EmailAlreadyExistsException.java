@@ -1,9 +1,9 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.exception;
 
-public class EmailAlreadyExistsException extends HABException {
+public class EmailAlreadyExistsException extends Throwable {
 
-    public EmailAlreadyExistsException(String message) {
-        super(message);
+    public EmailAlreadyExistsException() {
+        super("The email address is already in use.");
     }
 
 }
