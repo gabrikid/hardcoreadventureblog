@@ -16,13 +16,17 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
     private Instant postedOn;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(nullable = false)
     private AuthorEntity authorEntity;
 
 }
