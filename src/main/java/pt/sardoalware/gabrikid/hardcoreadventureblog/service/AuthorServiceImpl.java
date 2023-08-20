@@ -48,7 +48,9 @@ public class AuthorServiceImpl implements AuthorService {
             throws AuthorNotFoundException, EmailAlreadyExistsException {
         AuthorEntity authorEntity = validateAuthorExists(id);
 
-        if (!authorRequestDto.email().equals(authorEntity.getEmail())) {
+        // if the author is changing its email, gotta make sure that the
+        // email address is not already associated to another author
+        if (!authorRequestDto.email().equalsIgnoreCase(authorEntity.getEmail())) {
             validateEmailNotExists(authorRequestDto.email());
         }
 
