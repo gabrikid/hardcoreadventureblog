@@ -1,8 +1,8 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.repository;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.CrudRepository;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.PostEntity;
 
-public interface PostRepository extends PagingAndSortingRepository<PostEntity, Integer> {
+public interface PostRepository extends CrudRepository<PostEntity, Integer> {
 
 }

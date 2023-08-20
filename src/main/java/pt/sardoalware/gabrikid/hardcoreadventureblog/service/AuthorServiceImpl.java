@@ -71,7 +71,7 @@ public class AuthorServiceImpl implements AuthorService {
         return new AuthorResponseDto(authorEntity);
     }
 
-    private AuthorEntity validateAuthorExists(Integer id) throws AuthorNotFoundException {
+    protected AuthorEntity validateAuthorExists(Integer id) throws AuthorNotFoundException {
         Optional<AuthorEntity> authorEntityOptional = authorRepository.findById(id);
 
         if (authorEntityOptional.isPresent()) {
@@ -82,7 +82,7 @@ public class AuthorServiceImpl implements AuthorService {
         }
     }
 
-    private void validateEmailNotExists(String email) throws EmailAlreadyExistsException {
+    protected void validateEmailNotExists(String email) throws EmailAlreadyExistsException {
         Optional<AuthorEntity> authorEntityOptional = authorRepository.findByEmailIgnoreCase(email);
 
         if (authorEntityOptional.isPresent()) {
