@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AuthorServiceImpl implements AuthorService {
+public class AuthorServiceImpl extends BaseService implements AuthorService {
 
     private final AuthorRepository authorRepository;
     private final PostRepository postRepository;
@@ -49,7 +49,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorResponseDto update(Integer id, AuthorRequestDto authorRequestDto)
             throws AuthorNotFoundException, EmailAlreadyExistsException {
-        AuthorEntity authorEntity = validateAuthorExists(id);
+        AuthorEntity authorEntity = validateRecordExistence(authorRepository, id, AuthorNotFoundException::new);
 
         // if the author is changing its email, gotta make sure that the
         // email address is not already associated to another author
@@ -67,7 +67,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorDeleteResponseDto delete(Integer id)
             throws AuthorNotFoundException {
-        AuthorEntity authorEntity = validateAuthorExists(id);
+        AuthorEntity authorEntity = validateRecordExistence(authorRepository, id, AuthorNotFoundException::new);
 
         Integer rowsDeleted = postRepository.deleteByAuthorEntity(authorEntity);
         authorRepository.delete(authorEntity);
@@ -75,18 +75,7 @@ public class AuthorServiceImpl implements AuthorService {
         return new AuthorDeleteResponseDto(authorEntity, rowsDeleted);
     }
 
-    protected AuthorEntity validateAuthorExists(Integer id) throws AuthorNotFoundException {
-        Optional<AuthorEntity> authorEntityOptional = authorRepository.findById(id);
-
-        if (authorEntityOptional.isPresent()) {
-            return authorEntityOptional.get();
-        }
-        else {
-            throw new AuthorNotFoundException();
-        }
-    }
-
-    protected void validateEmailNotExists(String email) throws EmailAlreadyExistsException {
+    private void validateEmailNotExists(String email) throws EmailAlreadyExistsException {
         Optional<AuthorEntity> authorEntityOptional = authorRepository.findByEmailIgnoreCase(email);
 
         if (authorEntityOptional.isPresent()) {

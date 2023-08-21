@@ -10,19 +10,19 @@ import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.AuthorEntity;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.PostEntity;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.AuthorNotFoundException;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.PostNotFoundException;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.repository.AuthorRepository;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.repository.PostRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl extends BaseService implements PostService {
 
+    private final AuthorRepository authorRepository;
     private final PostRepository postRepository;
-    private final AuthorServiceImpl authorService;
 
     @Override
     public List<PostResponseDto> findAll() {
@@ -37,7 +37,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponseDto create(PostRequestDto postRequestDto)
             throws AuthorNotFoundException {
-        AuthorEntity authorEntity = authorService.validateAuthorExists(postRequestDto.authorId());
+        AuthorEntity authorEntity = validateRecordExistence(
+                authorRepository, postRequestDto.authorId(), AuthorNotFoundException::new
+        );
 
         PostEntity postEntity = postRepository.save(
                 postRequestDto.parse(authorEntity)
@@ -49,7 +51,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponseDto update(Integer id, PostUpdateRequestDto postUpdateRequestDto)
             throws PostNotFoundException {
-        PostEntity postEntity = validatePostExists(id);
+        PostEntity postEntity = validateRecordExistence(postRepository, id, PostNotFoundException::new);
 
         postUpdateRequestDto.merge(postEntity);
 
@@ -61,22 +63,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponseDto delete(Integer id)
             throws PostNotFoundException {
-        PostEntity postEntity = validatePostExists(id);
+        PostEntity postEntity = validateRecordExistence(postRepository, id, PostNotFoundException::new);
 
         postRepository.delete(postEntity);
 
         return new PostResponseDto(postEntity);
-    }
-
-    protected PostEntity validatePostExists(Integer id) throws PostNotFoundException {
-        Optional<PostEntity> postEntityOptional = postRepository.findById(id);
-
-        if (postEntityOptional.isPresent()) {
-            return postEntityOptional.get();
-        }
-        else {
-            throw new PostNotFoundException();
-        }
     }
 
 }
