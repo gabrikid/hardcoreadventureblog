@@ -24,6 +24,11 @@ public class HardcoreadventureblogExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDto(e.getMessage()));
     }
 
+    @ExceptionHandler(PostNotFoundException.class)
+    protected ResponseEntity<ErrorDto> handlePostNotFoundException(PostNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDto(e.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         // convert List<FieldError> to Map<String, List<String>>, like:
