@@ -3,12 +3,14 @@ package pt.sardoalware.gabrikid.hardcoreadventureblog.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorDeleteResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorRequestDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.AuthorEntity;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.AuthorNotFoundException;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.EmailAlreadyExistsException;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.repository.AuthorRepository;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.repository.PostRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import java.util.stream.StreamSupport;
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final PostRepository postRepository;
 
     @Override
     public List<AuthorResponseDto> findAll() {
@@ -62,13 +65,14 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorResponseDto delete(Integer id)
+    public AuthorDeleteResponseDto delete(Integer id)
             throws AuthorNotFoundException {
         AuthorEntity authorEntity = validateAuthorExists(id);
 
+        Integer rowsDeleted = postRepository.deleteByAuthorEntity(authorEntity);
         authorRepository.delete(authorEntity);
 
-        return new AuthorResponseDto(authorEntity);
+        return new AuthorDeleteResponseDto(authorEntity, rowsDeleted);
     }
 
     protected AuthorEntity validateAuthorExists(Integer id) throws AuthorNotFoundException {

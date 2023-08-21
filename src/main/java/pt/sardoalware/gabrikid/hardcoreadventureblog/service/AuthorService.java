@@ -1,5 +1,6 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.service;
 
+import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorDeleteResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorRequestDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.AuthorNotFoundException;
@@ -16,7 +17,7 @@ public interface AuthorService {
     AuthorResponseDto update(Integer id, AuthorRequestDto authorRequestDto)
             throws AuthorNotFoundException, EmailAlreadyExistsException;
 
-    AuthorResponseDto delete(Integer id)
+    AuthorDeleteResponseDto delete(Integer id)
             throws AuthorNotFoundException;
 
 }

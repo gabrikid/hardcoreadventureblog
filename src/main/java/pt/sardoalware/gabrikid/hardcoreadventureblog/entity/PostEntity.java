@@ -25,7 +25,7 @@ public class PostEntity {
     @Column(nullable = false)
     private Instant postedOn;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private AuthorEntity authorEntity;
 

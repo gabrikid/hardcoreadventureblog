@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorDeleteResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorRequestDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.AuthorNotFoundException;
@@ -39,7 +40,7 @@ public class AuthorController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthorResponseDto> delete(
+    public ResponseEntity<AuthorDeleteResponseDto> delete(
             @PathVariable Integer id
     ) throws AuthorNotFoundException {
         return ResponseEntity.ok(authorService.delete(id));
