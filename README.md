@@ -73,10 +73,10 @@ Create a Post:
 > POST http://localhost:8080/hardcoreadventureblog/post
 
     {
-    "title": "First Post",
-    "content": "Content of first post.",
-    "postedOn": "2023-08-20T15:01:02.000000000Z",
-    "authorId": 1
+        "title": "First Post",
+        "content": "Content of first post.",
+        "postedOn": "2023-08-20T15:01:02.000000000Z",
+        "authorId": 1
     }
 
 Update a Post:
