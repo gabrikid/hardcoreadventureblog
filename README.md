@@ -68,6 +68,10 @@ Delete an Author:
 
 > DELETE http://localhost:8080/hardcoreadventureblog/author/1
 
+Find all Posts:
+
+> GET http://localhost:8080/hardcoreadventureblog/post
+
 Create a Post:
 
 > POST http://localhost:8080/hardcoreadventureblog/post
@@ -87,6 +91,10 @@ Update a Post:
         "title": "Title changed",
         "content": "Content changed"
     }
+
+Delete a Post:
+
+> DELETE http://localhost:8080/hardcoreadventureblog/post/1
 
 #### H2 Console
 
