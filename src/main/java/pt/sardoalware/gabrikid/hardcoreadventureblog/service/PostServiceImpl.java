@@ -35,6 +35,14 @@ public class PostServiceImpl extends BaseService implements PostService {
     }
 
     @Override
+    public PostResponseDto find(Integer id)
+            throws PostNotFoundException {
+        PostEntity postEntity = validateRecordExistence(postRepository, id, PostNotFoundException::new);
+
+        return new PostResponseDto(postEntity);
+    }
+
+    @Override
     public PostResponseDto create(PostRequestDto postRequestDto)
             throws AuthorNotFoundException {
         AuthorEntity authorEntity = validateRecordExistence(

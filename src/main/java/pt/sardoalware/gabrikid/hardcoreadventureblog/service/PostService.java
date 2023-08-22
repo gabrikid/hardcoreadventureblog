@@ -11,6 +11,9 @@ public interface PostService {
 
     List<PostResponseDto> findAll();
 
+    PostResponseDto find(Integer id)
+        throws PostNotFoundException;
+
     PostResponseDto create(PostRequestDto postRequestDto)
             throws AuthorNotFoundException;
 

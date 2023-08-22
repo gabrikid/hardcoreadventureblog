@@ -1,6 +1,6 @@
 # WoW Classic Hardcore Adventure Blog
 
-With the release of Wow Classic Hardcore servers, five adventurers will team up to reach level 60 safely.
+With the release of WoW Classic Hardcore servers, five adventurers will team up to reach level 60 safely.
 They will be broadcasting their adventure on a joint stream, and each one of them will be posting daily records in this blog.
 Enjoy the adventure!
 
@@ -46,6 +46,10 @@ Find all Authors:
 
 > GET http://localhost:8080/hardcoreadventureblog/author
 
+Find an Author:
+
+> GET http://localhost:8080/hardcoreadventureblog/author/1
+
 Create an Author:
 
 > POST http://localhost:8080/hardcoreadventureblog/author
@@ -71,6 +75,10 @@ Delete an Author:
 Find all Posts:
 
 > GET http://localhost:8080/hardcoreadventureblog/post
+
+Find a Post:
+
+> GET http://localhost:8080/hardcoreadventureblog/post/1
 
 Create a Post:
 
@@ -101,3 +109,5 @@ Delete a Post:
 You can access H2 console by accessing the following URL through your browser:
 
 > http://localhost:8080/hardcoreadventureblog/h2-console
+
+Find the correct JDBC URL in logs.

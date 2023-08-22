@@ -11,6 +11,9 @@ public interface AuthorService {
 
     List<AuthorResponseDto> findAll();
 
+    AuthorResponseDto find(Integer id)
+        throws AuthorNotFoundException;
+
     AuthorResponseDto create(AuthorRequestDto authorRequestDto)
             throws EmailAlreadyExistsException;
 

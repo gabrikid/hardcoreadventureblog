@@ -25,6 +25,13 @@ public class AuthorController {
         return ResponseEntity.ok(authorService.findAll());
     }
 
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AuthorResponseDto> find(
+            @PathVariable Integer id
+    ) throws AuthorNotFoundException {
+        return ResponseEntity.ok(authorService.find(id));
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AuthorResponseDto> create(
             @RequestBody @Valid AuthorRequestDto authorRequestDto

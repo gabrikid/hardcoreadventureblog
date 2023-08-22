@@ -35,6 +35,14 @@ public class AuthorServiceImpl extends BaseService implements AuthorService {
     }
 
     @Override
+    public AuthorResponseDto find(Integer id)
+            throws AuthorNotFoundException {
+        AuthorEntity authorEntity = validateRecordExistence(authorRepository, id, AuthorNotFoundException::new);
+
+        return new AuthorResponseDto(authorEntity);
+    }
+
+    @Override
     public AuthorResponseDto create(AuthorRequestDto authorRequestDto)
             throws EmailAlreadyExistsException {
         validateEmailNotExists(authorRequestDto.email());

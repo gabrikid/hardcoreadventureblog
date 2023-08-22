@@ -25,6 +25,13 @@ public class PostController {
         return ResponseEntity.ok(postService.findAll());
     }
 
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PostResponseDto> find(
+            @PathVariable Integer id
+    ) throws PostNotFoundException {
+        return ResponseEntity.ok(postService.find(id));
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PostResponseDto> create(
             @RequestBody @Valid PostRequestDto postRequestDto
