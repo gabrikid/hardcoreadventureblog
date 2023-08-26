@@ -1,27 +1,13 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.entity;
 
 import static org.assertj.core.api.Assertions.*;
+import static pt.sardoalware.gabrikid.hardcoreadventureblog.util.Constants.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AuthorEntityTest {
 
-    private static final Integer
-            ID_TEST_1 = 1,
-            ID_TEST_2 = 2;
-    private static final String
-            NAME_TEST_1 = "Test",
-            EMAIL_TEST_1 = "test@test.com",
-            NAME_TEST_2 = "Test2",
-            EMAIL_TEST_2 = "test2@test.com",
-            A_STRING = "aString";
-
-    private AuthorEntity
-            first,
-            firstCopy,
-            second,
-            third,
-            fourth;
+    private AuthorEntity first, firstCopy, second, third, fourth;
 
     @BeforeEach
     public void setupTest() {
@@ -53,7 +39,9 @@ public class AuthorEntityTest {
 
     @Test
     public void toStringContains() {
-        assertThat(first.toString()).contains(String.valueOf(first.getId()), first.getName(), first.getEmail());
+        assertThat(first.toString()).contains(
+                String.valueOf(first.getId()), first.getName(), first.getEmail()
+        );
     }
 
     @Test
