@@ -12,26 +12,29 @@ import java.util.Optional;
 
 public class BaseServiceTest {
 
-    private BaseService baseService;
     private AuthorRepository authorRepositoryMock;
-    private AuthorEntity entityFirst;
+    private BaseService baseService;
 
     @BeforeEach
     public void setupTest() {
-        baseService = mock(BaseService.class, CALLS_REAL_METHODS);
         authorRepositoryMock = mock(AuthorRepository.class);
-        entityFirst = new AuthorEntity(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1);
+        baseService = mock(BaseService.class, CALLS_REAL_METHODS);
     }
 
     @Test
     public void validateRecordExistence() throws AuthorNotFoundException {
-        when(authorRepositoryMock.findById(ID_TEST_1)).thenReturn(Optional.of(entityFirst));
+        AuthorEntity
+                first = new AuthorEntity(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1),
+                firstCopy = new AuthorEntity(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1);
+
+        when(authorRepositoryMock.findById(ID_TEST_1)).thenReturn(Optional.of(first));
 
         AuthorEntity authorEntity = baseService.validateRecordExistence(
                 authorRepositoryMock, ID_TEST_1, AuthorNotFoundException::new
         );
 
-        assertThat(authorEntity).isSameAs(entityFirst);
+        assertThat(authorEntity).isSameAs(first);
+        assertThat(authorEntity).isEqualTo(firstCopy);
     }
 
     @Test
