@@ -8,7 +8,10 @@ public class Constants {
 
     public static final Integer
             ID_TEST_1       = 1,
-            ID_TEST_2       = 2;
+            ID_TEST_2       = 2,
+            ZERO            = 0,
+            ONE             = 1,
+            TWO             = 2;
 
     public static final String
             NAME_TEST_1     = "Test",

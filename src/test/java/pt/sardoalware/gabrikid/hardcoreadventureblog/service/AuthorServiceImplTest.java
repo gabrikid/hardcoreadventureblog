@@ -5,9 +5,12 @@ import static org.mockito.Mockito.*;
 import static pt.sardoalware.gabrikid.hardcoreadventureblog.util.Constants.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorDeleteResponseDto;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorRequestDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.AuthorEntity;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.AuthorNotFoundException;
+import pt.sardoalware.gabrikid.hardcoreadventureblog.exception.EmailAlreadyExistsException;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.repository.AuthorRepository;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.repository.PostRepository;
 import java.util.List;
@@ -16,15 +19,21 @@ import java.util.Optional;
 public class AuthorServiceImplTest {
 
     private AuthorRepository authorRepositoryMock;
+    private PostRepository postRepositoryMock;
     private AuthorServiceImpl authorServiceImpl;
+    private AuthorRequestDto requestFirst, requestSecond;
     private AuthorEntity entityFirst, entitySecond;
     private AuthorResponseDto responseFirst, responseSecond;
 
     @BeforeEach
     public void setupTest() {
         authorRepositoryMock = mock(AuthorRepository.class);
+        postRepositoryMock = mock(PostRepository.class);
 
-        authorServiceImpl = new AuthorServiceImpl(authorRepositoryMock, mock(PostRepository.class));
+        authorServiceImpl = new AuthorServiceImpl(authorRepositoryMock, postRepositoryMock);
+
+        requestFirst = new AuthorRequestDto(NAME_TEST_1, EMAIL_TEST_1);
+        requestSecond = new AuthorRequestDto(NAME_TEST_2, EMAIL_TEST_2);
 
         entityFirst = new AuthorEntity(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1);
         entitySecond = new AuthorEntity(ID_TEST_2, NAME_TEST_2, EMAIL_TEST_2);
@@ -40,9 +49,16 @@ public class AuthorServiceImplTest {
         List<AuthorResponseDto> authorResponseDtoList = authorServiceImpl.findAll();
 
         assertThat(authorResponseDtoList).isNotNull();
-        assertThat(authorResponseDtoList.size()).isEqualTo(2);
-        assertThat(authorResponseDtoList.get(0)).isEqualTo(responseFirst);
-        assertThat(authorResponseDtoList.get(1)).isEqualTo(responseSecond);
+        assertThat(authorResponseDtoList.size()).isEqualTo(TWO);
+        assertThat(authorResponseDtoList.get(ZERO)).isEqualTo(responseFirst);
+        assertThat(authorResponseDtoList.get(ONE)).isEqualTo(responseSecond);
+
+        when(authorRepositoryMock.findAll()).thenReturn(List.of());
+
+        authorResponseDtoList = authorServiceImpl.findAll();
+
+        assertThat(authorResponseDtoList).isNotNull();
+        assertThat(authorResponseDtoList.size()).isEqualTo(ZERO);
     }
 
     @Test
@@ -61,6 +77,89 @@ public class AuthorServiceImplTest {
 
         assertThatThrownBy(() ->
                 authorServiceImpl.find(ID_TEST_1)
+        ).isInstanceOf(
+                AuthorNotFoundException.class
+        );
+    }
+
+    @Test
+    public void create() throws EmailAlreadyExistsException {
+        when(authorRepositoryMock.findByEmailIgnoreCase(EMAIL_TEST_1)).thenReturn(Optional.empty());
+        when(authorRepositoryMock.save(requestFirst.parse())).thenReturn(entityFirst);
+
+        AuthorResponseDto authorResponseDto = authorServiceImpl.create(requestFirst);
+
+        assertThat(authorResponseDto).isNotNull();
+        assertThat(authorResponseDto).isEqualTo(responseFirst);
+    }
+
+    @Test
+    public void createThrowing() {
+        when(authorRepositoryMock.findByEmailIgnoreCase(EMAIL_TEST_1)).thenReturn(Optional.of(entityFirst));
+
+        assertThatThrownBy(() ->
+                authorServiceImpl.create(requestFirst)
+        ).isInstanceOf(
+                EmailAlreadyExistsException.class
+        );
+    }
+
+    @Test
+    public void update() throws AuthorNotFoundException, EmailAlreadyExistsException {
+        AuthorEntity updatedEntityFirst = new AuthorEntity(ID_TEST_1, NAME_TEST_2, EMAIL_TEST_2);
+        AuthorResponseDto updatedResponseFirst = new AuthorResponseDto(updatedEntityFirst);
+
+        when(authorRepositoryMock.findById(ID_TEST_1)).thenReturn(Optional.of(entityFirst));
+        when(authorRepositoryMock.findByEmailIgnoreCase(EMAIL_TEST_2)).thenReturn(Optional.empty());
+        when(authorRepositoryMock.save(updatedEntityFirst)).thenReturn(updatedEntityFirst);
+
+        AuthorResponseDto authorResponseDto = authorServiceImpl.update(ID_TEST_1, requestSecond);
+
+        assertThat(authorResponseDto).isNotNull();
+        assertThat(authorResponseDto).isEqualTo(updatedResponseFirst);
+    }
+
+    @Test
+    public void updateThrowing() {
+        when(authorRepositoryMock.findById(ID_TEST_1)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() ->
+                authorServiceImpl.update(ID_TEST_1, requestSecond)
+        ).isInstanceOf(
+                AuthorNotFoundException.class
+        );
+
+        when(authorRepositoryMock.findById(ID_TEST_1)).thenReturn(Optional.of(entityFirst));
+        when(authorRepositoryMock.findByEmailIgnoreCase(EMAIL_TEST_2)).thenReturn(Optional.of(entitySecond));
+
+        assertThatThrownBy(() ->
+                authorServiceImpl.update(ID_TEST_1, requestSecond)
+        ).isInstanceOf(
+                EmailAlreadyExistsException.class
+        );
+    }
+
+    @Test
+    public void delete() throws AuthorNotFoundException {
+        AuthorDeleteResponseDto deletedResponseFirst = new AuthorDeleteResponseDto(
+                ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1, TWO
+        );
+
+        when(authorRepositoryMock.findById(ID_TEST_1)).thenReturn(Optional.of(entityFirst));
+        when(postRepositoryMock.deleteByAuthorEntity(entityFirst)).thenReturn(TWO);
+
+        AuthorDeleteResponseDto authorDeleteResponseDto = authorServiceImpl.delete(ID_TEST_1);
+
+        assertThat(authorDeleteResponseDto).isNotNull();
+        assertThat(authorDeleteResponseDto).isEqualTo(deletedResponseFirst);
+    }
+
+    @Test
+    public void deleteThrowing() {
+        when(authorRepositoryMock.findById(ID_TEST_1)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() ->
+                authorServiceImpl.delete(ID_TEST_1)
         ).isInstanceOf(
                 AuthorNotFoundException.class
         );
