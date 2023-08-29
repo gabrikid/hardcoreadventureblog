@@ -12,6 +12,8 @@ This is a **Spring Boot 3.1** Microservice that builds with **Maven** and runs o
 
 - **H2 Database** - In memory database.
 - **Lombok** - Helps reducing boilerplate code.
+- **Mockito** - To isolate unit testing.
+- **PITest** - To perform mutation testing.
 
 ### Starting the Microservice
 
@@ -103,6 +105,14 @@ Update a Post:
 Delete a Post:
 
 > DELETE http://localhost:8080/hardcoreadventureblog/post/1
+
+#### Run PITest to perform Mutation Testing
+
+PITest is included in project, and can be run through following Maven goal:
+
+> mvn test-compile org.pitest:pitest-maven:mutationCoverage
+
+This will output an html report to **target/pit-reports/**.
 
 #### H2 Console
 
