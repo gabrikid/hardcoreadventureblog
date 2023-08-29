@@ -35,6 +35,7 @@ public class BaseServiceTest {
 
         assertThat(authorEntity).isSameAs(first);
         assertThat(authorEntity).isEqualTo(firstCopy);
+        verify(authorRepositoryMock).findById(ID_TEST_1);
     }
 
     @Test
@@ -46,6 +47,7 @@ public class BaseServiceTest {
         ).isInstanceOf(
                 AuthorNotFoundException.class
         );
+        verify(authorRepositoryMock).findById(ID_TEST_1);
     }
 
 }

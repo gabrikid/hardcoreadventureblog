@@ -59,6 +59,8 @@ public class AuthorServiceImplTest {
 
         assertThat(authorResponseDtoList).isNotNull();
         assertThat(authorResponseDtoList.size()).isEqualTo(ZERO);
+
+        verify(authorRepositoryMock, times(2)).findAll();
     }
 
     @Test
@@ -69,6 +71,7 @@ public class AuthorServiceImplTest {
 
         assertThat(authorResponseDto).isNotNull();
         assertThat(authorResponseDto).isEqualTo(responseFirst);
+        verify(authorRepositoryMock).findById(ID_TEST_1);
     }
 
     @Test
@@ -80,6 +83,7 @@ public class AuthorServiceImplTest {
         ).isInstanceOf(
                 AuthorNotFoundException.class
         );
+        verify(authorRepositoryMock).findById(ID_TEST_1);
     }
 
     @Test
@@ -91,6 +95,8 @@ public class AuthorServiceImplTest {
 
         assertThat(authorResponseDto).isNotNull();
         assertThat(authorResponseDto).isEqualTo(responseFirst);
+        verify(authorRepositoryMock).findByEmailIgnoreCase(EMAIL_TEST_1);
+        verify(authorRepositoryMock).save(requestFirst.parse());
     }
 
     @Test
@@ -102,6 +108,7 @@ public class AuthorServiceImplTest {
         ).isInstanceOf(
                 EmailAlreadyExistsException.class
         );
+        verify(authorRepositoryMock).findByEmailIgnoreCase(EMAIL_TEST_1);
     }
 
     @Test
@@ -117,6 +124,9 @@ public class AuthorServiceImplTest {
 
         assertThat(authorResponseDto).isNotNull();
         assertThat(authorResponseDto).isEqualTo(updatedResponseFirst);
+        verify(authorRepositoryMock).findById(ID_TEST_1);
+        verify(authorRepositoryMock).findByEmailIgnoreCase(EMAIL_TEST_2);
+        verify(authorRepositoryMock).save(updatedEntityFirst);
     }
 
     @Test
@@ -137,6 +147,9 @@ public class AuthorServiceImplTest {
         ).isInstanceOf(
                 EmailAlreadyExistsException.class
         );
+
+        verify(authorRepositoryMock, times(2)).findById(ID_TEST_1);
+        verify(authorRepositoryMock).findByEmailIgnoreCase(EMAIL_TEST_2);
     }
 
     @Test
@@ -152,6 +165,8 @@ public class AuthorServiceImplTest {
 
         assertThat(authorDeleteResponseDto).isNotNull();
         assertThat(authorDeleteResponseDto).isEqualTo(deletedResponseFirst);
+        verify(authorRepositoryMock).delete(entityFirst);
+        verify(postRepositoryMock).deleteByAuthorEntity(entityFirst);
     }
 
     @Test
@@ -163,6 +178,7 @@ public class AuthorServiceImplTest {
         ).isInstanceOf(
                 AuthorNotFoundException.class
         );
+        verify(authorRepositoryMock).findById(ID_TEST_1);
     }
 
 }
