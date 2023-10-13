@@ -15,6 +15,8 @@
 	<description>WoW Classic Hardcore Adventure Blog</description>
 	<properties>
 		<java.version>17</java.version>
+        <pitest.version>1.14.4</pitest.version>
+        <pitest.junit5.version>1.2.0</pitest.junit5.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -47,6 +49,32 @@
 		</dependency>
 	</dependencies>
 
+    <profiles>
+        <profile>
+            <id>mutation-all</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>${pitest.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>mutationCoverage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -64,12 +92,12 @@
 			<plugin>
 				<groupId>org.pitest</groupId>
 				<artifactId>pitest-maven</artifactId>
-				<version>1.14.4</version>
+				<version>${pitest.version}</version>
 				<dependencies>
 					<dependency>
 						<groupId>org.pitest</groupId>
 						<artifactId>pitest-junit5-plugin</artifactId>
-						<version>1.2.0</version>
+						<version>${pitest.junit5.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>

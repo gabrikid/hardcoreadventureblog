@@ -112,6 +112,10 @@ PITest is included in project, and can be run through following Maven goal:
 
 > mvn test-compile org.pitest:pitest-maven:mutationCoverage
 
+Alternatively, there is a profile that can be used as follows:
+
+> clean install -P mutation-all
+
 This will output an html report to **target/pit-reports/**.
 
 #### H2 Console
