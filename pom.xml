@@ -5,18 +5,18 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.3</version>
+		<version>3.1.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>pt.sardoalware.gabrikid</groupId>
 	<artifactId>hardcoreadventureblog</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>hardcoreadventureblog</name>
 	<description>WoW Classic Hardcore Adventure Blog</description>
 	<properties>
 		<java.version>17</java.version>
-        <pitest.version>1.14.4</pitest.version>
-        <pitest.junit5.version>1.2.0</pitest.junit5.version>
+        <pitest.version>1.15.3</pitest.version>
+        <pitest.junit5.version>1.2.1</pitest.junit5.version>
 	</properties>
 	<dependencies>
 		<dependency>
