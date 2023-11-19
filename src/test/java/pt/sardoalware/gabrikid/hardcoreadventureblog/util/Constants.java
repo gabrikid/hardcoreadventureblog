@@ -16,6 +16,10 @@ public class Constants {
             EMAIL_TEST_1    = "test@test.com",
             NAME_TEST_2     = "Test2",
             EMAIL_TEST_2    = "test2@test.com",
+            TITLE_TEST_1    = "Test Title",
+            CONTENT_TEST_1  = "Test Content",
+            TITLE_TEST_2    = "Test Title 2",
+            CONTENT_TEST_2  = "Test Content 2",
             A_STRING        = "aString";
 
 }
