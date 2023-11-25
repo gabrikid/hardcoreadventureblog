@@ -1,6 +1,7 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.mapper;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static pt.sardoalware.gabrikid.hardcoreadventureblog.util.Constants.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,13 @@ public class AuthorMapperTest {
     }
 
     @Test
+    public void dtoToEntityReturnsNull() {
+        AuthorEntity authorEntity = authorMapper.dtoToEntity(null);
+
+        assertThat(authorEntity).isNull();
+    }
+
+    @Test
     public void mergeDtoToEntity() {
         AuthorRequestDto authorRequestDto = new AuthorRequestDto(NAME_TEST_2, EMAIL_TEST_2);
         AuthorEntity authorEntity = new AuthorEntity(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1);
@@ -39,6 +47,31 @@ public class AuthorMapperTest {
     }
 
     @Test
+    public void mergeDtoToEntityNullRequest() {
+        AuthorEntity authorEntity = new AuthorEntity(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1);
+
+        assertDoesNotThrow(() -> authorMapper.mergeDtoToEntity(null, authorEntity));
+
+        assertThat(authorEntity.getId()).isEqualTo(ID_TEST_1);
+        assertThat(authorEntity.getName()).isEqualTo(NAME_TEST_1);
+        assertThat(authorEntity.getEmail()).isEqualTo(EMAIL_TEST_1);
+    }
+
+    /*
+    @Test
+    public void mergeDtoToEntityNullEntity() {
+        AuthorRequestDto authorRequestDto = new AuthorRequestDto(NAME_TEST_2, EMAIL_TEST_2);
+
+        assertDoesNotThrow(() -> authorMapper.mergeDtoToEntity(authorRequestDto, null));
+    }
+    */
+
+    @Test
+    public void mergeDtoToEntityNullArguments() {
+        assertDoesNotThrow(() -> authorMapper.mergeDtoToEntity(null, null));
+    }
+
+    @Test
     public void entityToDto() {
         AuthorResponseDto authorResponseDto = authorMapper.entityToDto(
                 new AuthorEntity(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1)
@@ -47,6 +80,13 @@ public class AuthorMapperTest {
         assertThat(authorResponseDto).isEqualTo(
                 new AuthorResponseDto(ID_TEST_1, NAME_TEST_1, EMAIL_TEST_1)
         );
+    }
+
+    @Test
+    public void entityToDtoReturnsNull() {
+        AuthorResponseDto authorResponseDto = authorMapper.entityToDto(null);
+
+        assertThat(authorResponseDto).isNull();
     }
 
     @Test
@@ -64,6 +104,13 @@ public class AuthorMapperTest {
                         new AuthorResponseDto(ID_TEST_2, NAME_TEST_2, EMAIL_TEST_2)
                 )
         );
+    }
+
+    @Test
+    public void entityIterableToDtoListReturnsNull() {
+        List<AuthorResponseDto> authorResponseDtoList = authorMapper.entityIterableToDtoList(null);
+
+        assertThat(authorResponseDtoList).isNull();
     }
 
 }

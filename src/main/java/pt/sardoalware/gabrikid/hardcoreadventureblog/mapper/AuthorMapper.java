@@ -1,13 +1,12 @@
 package pt.sardoalware.gabrikid.hardcoreadventureblog.mapper;
 
-import org.mapstruct.AnnotateWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorRequestDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.dto.AuthorResponseDto;
 import pt.sardoalware.gabrikid.hardcoreadventureblog.entity.AuthorEntity;
-
 import java.util.List;
 
 // -----------------------------------------------------------------
@@ -15,9 +14,14 @@ import java.util.List;
 // CLASS level retention, and javax.annotation.processing.Generated
 // has SOURCE level retention.
 // -----------------------------------------------------------------
-@AnnotateWith(value = lombok.Generated.class)
+//import org.mapstruct.AnnotateWith;
+//@AnnotateWith(value = lombok.Generated.class)
 // -----------------------------------------------------------------
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedSourcePolicy = ReportingPolicy.IGNORE,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface AuthorMapper {
 
     AuthorEntity dtoToEntity(AuthorRequestDto authorRequestDto);
