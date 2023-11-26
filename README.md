@@ -12,6 +12,7 @@ This is a **Spring Boot 3.1** Microservice that builds with **Maven** and runs o
 
 - **H2 Database** - In memory database.
 - **Lombok** - Helps reducing boilerplate code.
+- **MapStruct** - Helps with mapping operations.
 - **Mockito** - To isolate unit testing.
 - **PITest** - To perform mutation testing.
 
